@@ -36,7 +36,7 @@ public final class FirstPartTasks {
 
     // Список альбомов, в которых есть хотя бы один трек с рейтингом более 95, отсортированный по названию
     public static List<Album> sortedFavorites(Stream<Album> s) {
-        return s.filter(album -> album.getTracks().stream().anyMatch(track -> track.getRating() > NINETY_FIVE)).collect(Collectors.toList());
+        return s.filter(album -> album.getTracks().stream().anyMatch(track -> track.getRating() > NINETY_FIVE)).sorted(Comparator.comparing(Album::getName)).collect(Collectors.toList());
     }
 
     // Сгруппировать альбомы по артистам
@@ -63,6 +63,7 @@ public final class FirstPartTasks {
     public static long countAlbumDuplicates(Stream<Album> albums) {
         return albums.filter(new Predicate<Album>() {
             Set<Album> encountered = new TreeSet<Album>(Comparator.comparing(Album::getName));
+
             @Override
             public boolean test(Album album) {
                 return !encountered.add(album);
