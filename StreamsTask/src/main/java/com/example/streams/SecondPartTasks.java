@@ -1,11 +1,12 @@
 package com.example.streams;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public final class SecondPartTasks {
 
-    private SecondPartTasks() {}
+    private SecondPartTasks() {
+    }
 
     // Найти строки из переданных файлов, в которых встречается указанная подстрока.
     public static List<String> findQuotes(List<String> paths, CharSequence sequence) {
@@ -22,7 +23,12 @@ public final class SecondPartTasks {
     // Дано отображение из имени автора в список с содержанием его произведений.
     // Надо вычислить, чья общая длина произведений наибольшая.
     public static String findPrinter(Map<String, List<String>> compositions) {
-        throw new UnsupportedOperationException();
+        return new ArrayList<>(compositions.entrySet()).stream().max(new Comparator<Map.Entry<String, List<String>>>() {
+            @Override
+            public int compare(Map.Entry<String, List<String>> o1, Map.Entry<String, List<String>> o2) {
+                return o1.getValue().stream().collect(Collectors.joining()).toCharArray().length - o2.getValue().stream().collect(Collectors.joining()).toCharArray().length;
+            }
+        }).get().getKey();
     }
 
     // Вы крупный поставщик продуктов. Каждая торговая сеть делает вам заказ в виде Map<Товар, Количество>.
