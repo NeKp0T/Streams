@@ -1,15 +1,30 @@
 package com.example.streams;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class SecondPartTasks {
 
     private SecondPartTasks() {}
 
+    private static Stream<String> handleFile(String filePath) throws RuntimeException {
+        try (var reader = new BufferedReader(new FileReader(filePath))) {
+            // toList and fromList to prevent laziness
+            return reader.lines().collect(Collectors.toList()).stream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // Найти строки из переданных файлов, в которых встречается указанная подстрока.
-    public static List<String> findQuotes(List<String> paths, CharSequence sequence) {
-        throw new UnsupportedOperationException();
+    public static List<String> findQuotes(List<String> paths, CharSequence sequence) throws RuntimeException {
+        return paths.stream().flatMap(p -> handleFile(p)).filter(s -> s.contains(sequence)).collect(Collectors.toList());
     }
 
     // В квадрат с длиной стороны 1 вписана мишень.
